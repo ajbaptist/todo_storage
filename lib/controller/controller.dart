@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:todo_storage/config/value.dart';
 import 'package:todo_storage/module/location_service.dart';
 
 import '../appInit/app_config.dart';
@@ -11,19 +12,17 @@ class TodoController extends GetxController {
   late AppConfigService appConfigService;
   TextEditingController textEditingController = TextEditingController();
   RxList rxList = [].obs;
-  RxString location="unknown-please on location".obs;
+
+  RxBool isLocation=false.obs;
+
   RxBool check=false.obs;
-  final message = ''.obs;
-  final title = ''.obs;
+
   final key="key";
-  final description = ''.obs;
-  final edit = false.obs;
-  final load = false.obs;
+ 
   @override
   void onInit() {
     appConfigService = Get.find<AppConfigService>();
     getAnnotations();
-    getUserLocation().then((value) => location(value));
     super.onInit();
   }
 
@@ -40,12 +39,16 @@ class TodoController extends GetxController {
   }
 
   addTodo(value) async {
+
+    // ignore: unrelated_type_equality_checks
+    
+
   
     rxList.add(
       {
         "title":value,
         "date":value,
-        "location":location.value,
+        "location":location,
         "check":false
       }
       

@@ -1,28 +1,36 @@
- import 'package:geocoding/geocoding.dart' as d;
-import 'package:location/location.dart';
- import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart' as d;
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:todo_storage/config/value.dart';
+import 'package:todo_storage/controller/controller.dart';
 
-Future getUserLocation() async {//call this async method from whereever you need
+Future getUserLocation() async {
+  //call this async method from whereever you need
+
+  var error = '';
+  late Position position;
+
+  try {
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // ignore: empty_catches
+  } on PlatformException {}
+
+  try {
+    var addresses = await d.placemarkFromCoordinates(
+        position.latitude, position.longitude,
+        localeIdentifier: "en");
+
+    var first = addresses.first;
+
+    Fluttertoast.showToast(msg: "location stored");
+
     
-   late   LocationData myLocation;
-      String error;
-      var location = Location();
-      try {
-        myLocation = await location.getLocation();
-      } on PlatformException catch (e) {
-        if (e.code == 'PERMISSION_DENIED') {
-          error = 'please grant permission';
-          print(error);
-        }
-        if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-          error = 'permission denied- please enable it from app settings';
-          print(error);
-        }
-      
-      }
- 
-      var addresses =    await d.placemarkFromCoordinates(myLocation.latitude!, myLocation.longitude!,localeIdentifier: "en");
-      var first = addresses.first;
-    
-      return first.locality;
-    }
+
+    location = first.locality!;
+  } catch (e) {
+    Fluttertoast.showToast(msg: e.toString());
+  }
+}

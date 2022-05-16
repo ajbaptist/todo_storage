@@ -7,10 +7,12 @@ import 'package:todo_storage/routes/route.dart';
 import 'package:todo_storage/view/home_screen.dart';
 
 import 'appInit/app_config.dart';
+import 'module/location_service.dart';
 
 void main() async {
   await GetStorage.init();
   await Get.putAsync(() => AppConfigService().init());
+  
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: Routes.home,
