@@ -14,9 +14,9 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - run:
-          name: "john baptist"
-          command: "echo Hello, World!"
+      - run: flutter doctor
+      - run: flutter test 
+      - run: flutter -v build apk
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
